@@ -49,7 +49,7 @@
             border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.05);
-            transform: translateZ(30px); /* Pushes text forward in 3D space */
+            transform: translateZ(30px);
             animation: floatCard 4s ease-in-out infinite alternate;
         }
 
@@ -105,7 +105,6 @@
             cursor: pointer;
             display: inline-block;
             filter: drop-shadow(0 0 10px #ff0040);
-            animation: heartbeat 1.2s infinite;
             transition: transform 0.2s;
             opacity: 0;
             animation: heartbeat 1.2s infinite, fadeIn 2s ease forwards 3.5s;
@@ -182,6 +181,19 @@
             0% { width: 0; height: 0; top: var(--y); left: var(--x); opacity: 1; }
             100% { width: 200px; height: 200px; top: calc(var(--y) - 100px); left: calc(var(--x) - 100px); opacity: 0; }
         }
+
+        /* Bottom Right Name */
+        .corner-name {
+            position: fixed;
+            bottom: 15px;
+            right: 20px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: 300;
+            letter-spacing: 2px;
+            z-index: 50;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -190,10 +202,13 @@
         <div class="card">
             <div class="prefix">I love you,</div>
             <div class="name">Ploy Tippanan</div>
-            <div class="signature">Yours, Bright</div>
+            <div class="signature">Yours, Ton</div>
             <div class="mega-btn" id="mega-btn">❤</div>
         </div>
     </div>
+
+    <!-- Small corner text -->
+    <div class="corner-name">Ton</div>
 
     <script>
         const colors = ['#ff4d6d', '#ffb3c6', '#ffffff', '#ff0040', '#ffd6e0'];
@@ -216,7 +231,7 @@
         let lastTrailTime = 0;
         function createTrail(x, y) {
             const now = Date.now();
-            if (now - lastTrailTime < 30) return; // limit trail frequency
+            if (now - lastTrailTime < 30) return;
             lastTrailTime = now;
 
             const trail = document.createElement('div');
@@ -288,27 +303,22 @@
         }
 
         document.addEventListener('click', (e) => {
-            // Don't trigger standard burst if clicking the mega button
             if (e.target.id === 'mega-btn') return;
             createExplosion(e.clientX, e.clientY, 12, 1);
         });
 
-        // 5. Mega Burst Button (The ultimate romantic explosion)
+        // 5. Mega Burst Button
         const megaBtn = document.getElementById('mega-btn');
         megaBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent standard click
+            e.stopPropagation();
             
-            // Screen center explosion
             const cx = window.innerWidth / 2;
             const cy = window.innerHeight / 2;
             
-            // Massive multi-wave explosion
             createExplosion(cx, cy, 100, 3);
-            
             setTimeout(() => createExplosion(cx, cy, 80, 5), 200);
             setTimeout(() => createExplosion(cx, cy, 120, 8), 400);
 
-            // Flash effect on background
             const flash = document.createElement('div');
             flash.style.position = 'fixed';
             flash.style.top = '0';
