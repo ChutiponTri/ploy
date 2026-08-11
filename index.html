@@ -6,6 +6,9 @@
     <title>For Ploy Tippanan</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        /* ========================================= */
+        /* ORIGINAL CSS - KEPT EXACTLY THE SAME      */
+        /* ========================================= */
         * {
             margin: 0;
             padding: 0;
@@ -34,7 +37,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* 3D Glassmorphism Card */
         .card-wrapper {
             transform-style: preserve-3d;
             transition: transform 0.1s;
@@ -58,7 +60,6 @@
             100% { transform: translateY(-15px) translateZ(30px); }
         }
 
-        /* Typography */
         .prefix {
             font-size: clamp(1rem, 3vw, 1.2rem);
             color: #ffd6e0;
@@ -97,7 +98,6 @@
             letter-spacing: 2px;
         }
 
-        /* Beating Heart Button */
         .mega-btn {
             margin-top: 25px;
             font-size: 2.5rem;
@@ -125,27 +125,23 @@
             to { opacity: 1; }
         }
 
-        /* Particle System CSS */
         .particle {
             position: absolute;
             pointer-events: none;
             z-index: 1;
         }
 
-        /* Background Floaters */
         .floater {
             animation: floatUp linear forwards;
             opacity: 0.6;
         }
 
-        /* Trail Effects */
         .trail {
             animation: fadeOut 0.8s ease-out forwards;
             filter: blur(1px);
             z-index: 30;
         }
 
-        /* Explosion Effects */
         .burst {
             animation: explode 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
             z-index: 40;
@@ -182,7 +178,6 @@
             100% { width: 200px; height: 200px; top: calc(var(--y) - 100px); left: calc(var(--x) - 100px); opacity: 0; }
         }
 
-        /* Bottom Right Name */
         .corner-name {
             position: fixed;
             bottom: 15px;
@@ -194,10 +189,116 @@
             z-index: 50;
             pointer-events: none;
         }
+
+        /* ========================================= */
+        /* NEW CSS - GIMMICK ADDITIONS               */
+        /* ========================================= */
+
+        /* The Bear Counter */
+        .bear-counter {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 1.1rem;
+            color: #ffb3c6;
+            z-index: 50;
+            opacity: 0;
+            animation: fadeIn 2s forwards 4s; /* Fades in after main intro */
+            font-weight: 300;
+            letter-spacing: 1px;
+            pointer-events: none;
+        }
+
+        /* The Red Cute Bears */
+        .red-bear {
+            position: absolute;
+            font-size: 2.5rem;
+            cursor: pointer;
+            z-index: 100;
+            /* Tinting standard emoji to a romantic reddish pink glow */
+            filter: drop-shadow(0 0 10px #ff0040) hue-rotate(320deg) saturate(2);
+            animation: bearPop 4s ease-in-out forwards;
+            transition: transform 0.2s;
+        }
+
+        .red-bear:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        @keyframes bearPop {
+            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+            10% { transform: scale(1) rotate(0deg); opacity: 1; }
+            80% { transform: scale(1) rotate(0deg); opacity: 1; }
+            90% { transform: scale(1.2) rotate(20deg); opacity: 1; }
+            100% { transform: scale(0) rotate(0deg); opacity: 0; }
+        }
+
+        /* The Secret Romantic Reveal Modal */
+        .secret-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -40%) scale(0.8);
+            background: rgba(20, 5, 15, 0.85);
+            padding: 3rem;
+            border-radius: 30px;
+            text-align: center;
+            border: 2px solid rgba(255, 0, 64, 0.3);
+            box-shadow: 0 0 50px rgba(255, 0, 64, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.05);
+            color: white;
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 1.2s cubic-bezier(0.1, 0.8, 0.3, 1);
+            backdrop-filter: blur(15px);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .secret-message.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto;
+        }
+
+        .secret-message h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            color: #ff0040;
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px #ff1e56;
+        }
+
+        .secret-message p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #ffd6e0;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .secret-message .close-btn {
+            background: transparent;
+            border: 1px solid #ff0040;
+            color: #ff0040;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .secret-message .close-btn:hover {
+            background: #ff0040;
+            color: white;
+            box-shadow: 0 0 15px #ff0040;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Original Content -->
     <div class="card-wrapper" id="card-wrapper">
         <div class="card">
             <div class="prefix">I love you,</div>
@@ -206,15 +307,25 @@
             <div class="mega-btn" id="mega-btn">❤</div>
         </div>
     </div>
-
-    <!-- Small corner text -->
     <div class="corner-name">Ton</div>
 
+    <!-- NEW CONTENT: Bear Counter -->
+    <div class="bear-counter" id="bear-counter">Find 7 hidden bears! 🧸 0/7</div>
+
+    <!-- NEW CONTENT: Secret Reveal Message -->
+    <div class="secret-message" id="secret-message">
+        <h2>You caught them all! 🧸❤️</h2>
+        <p>Just like how you caught my heart, Ploy. <br><br> Every little bear represents a reason why I love you. You are my world, my happiness, and my everything.</p>
+        <button class="close-btn" id="close-msg">Forever Yours</button>
+    </div>
+
     <script>
+        /* ========================================= */
+        /* ORIGINAL JS - KEPT EXACTLY THE SAME       */
+        /* ========================================= */
         const colors = ['#ff4d6d', '#ffb3c6', '#ffffff', '#ff0040', '#ffd6e0'];
         const shapes = ['❤', '✨', '✦', '✿'];
 
-        // 1. 3D Card Parallax Effect
         const cardWrapper = document.getElementById('card-wrapper');
         document.addEventListener('mousemove', (e) => {
             const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
@@ -222,12 +333,10 @@
             cardWrapper.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
 
-        // Reset on mouse leave
         document.addEventListener('mouseleave', () => {
             cardWrapper.style.transform = `rotateY(0deg) rotateX(0deg)`;
         });
 
-        // 2. Cursor Trail Effect (Stardust)
         let lastTrailTime = 0;
         function createTrail(x, y) {
             const now = Date.now();
@@ -252,7 +361,6 @@
             createTrail(touch.clientX, touch.clientY);
         });
 
-        // 3. Background Floaters
         function createFloater() {
             const floater = document.createElement('div');
             floater.classList.add('particle', 'floater');
@@ -268,9 +376,7 @@
         }
         setInterval(createFloater, 400);
 
-        // 4. Standard Click/Tap Burst & Ripple
         function createExplosion(x, y, amount, multiplier) {
-            // Ripple
             const ripple = document.createElement('div');
             ripple.classList.add('ripple');
             ripple.style.setProperty('--x', x + 'px');
@@ -278,7 +384,6 @@
             document.body.appendChild(ripple);
             setTimeout(() => ripple.remove(), 1000);
 
-            // Particles
             for (let i = 0; i < amount; i++) {
                 const burst = document.createElement('div');
                 burst.classList.add('particle', 'burst');
@@ -303,15 +408,13 @@
         }
 
         document.addEventListener('click', (e) => {
-            if (e.target.id === 'mega-btn') return;
+            if (e.target.id === 'mega-btn' || e.target.classList.contains('red-bear') || e.target.closest('#secret-message')) return;
             createExplosion(e.clientX, e.clientY, 12, 1);
         });
 
-        // 5. Mega Burst Button
         const megaBtn = document.getElementById('mega-btn');
         megaBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            
             const cx = window.innerWidth / 2;
             const cy = window.innerHeight / 2;
             
@@ -334,6 +437,92 @@
                 flash.style.opacity = '0';
                 setTimeout(() => flash.remove(), 1000);
             }, 50);
+        });
+
+        /* ========================================= */
+        /* NEW JS - BEAR HUNT MINI-GAME LOGIC        */
+        /* ========================================= */
+
+        let bearsCaught = 0;
+        const totalBearsToCatch = 7;
+        const bearCounterEl = document.getElementById('bear-counter');
+        const secretMessageEl = document.getElementById('secret-message');
+        const closeMsgBtn = document.getElementById('close-msg');
+
+        function spawnBear() {
+            // Stop spawning if she found them all
+            if (bearsCaught >= totalBearsToCatch) return;
+
+            const bear = document.createElement('div');
+            bear.classList.add('red-bear');
+            bear.innerHTML = '🧸';
+
+            // Randomize position but keep it safely inside the screen
+            const safePadding = 80; 
+            const x = Math.random() * (window.innerWidth - safePadding * 2) + safePadding;
+            const y = Math.random() * (window.innerHeight - safePadding * 2) + safePadding;
+            
+            bear.style.left = x + 'px';
+            bear.style.top = y + 'px';
+
+            document.body.appendChild(bear);
+
+            // When Ploy clicks/catches the bear
+            bear.addEventListener('click', (e) => {
+                e.stopPropagation(); // prevent background click
+                bearsCaught++;
+                
+                // Update counter text
+                bearCounterEl.innerHTML = `🧸 ${bearsCaught} / ${totalBearsToCatch}`;
+                bearCounterEl.style.color = '#ff0040'; // flash bright red
+                setTimeout(() => bearCounterEl.style.color = '#ffb3c6', 300); // fade back
+                
+                // Create a special heart explosion right where she caught the bear
+                createExplosion(e.clientX, e.clientY, 25, 1.5);
+                
+                // Remove the caught bear
+                bear.remove();
+
+                // Check for WIN condition
+                if (bearsCaught === totalBearsToCatch) {
+                    triggerRomanticReveal();
+                }
+            });
+
+            // The bear disappears after 3.9 seconds (just before its CSS animation fully ends)
+            setTimeout(() => {
+                if (document.body.contains(bear)) {
+                    bear.remove();
+                }
+            }, 3900);
+        }
+
+        // Start spawning a new bear every 1.5 seconds!
+        setTimeout(() => {
+            setInterval(spawnBear, 1500);
+        }, 5000); // Wait 5 seconds after page loads before the game starts
+
+        // The Grand Reveal
+        function triggerRomanticReveal() {
+            // Massive fireworks in the center
+            const cx = window.innerWidth / 2;
+            const cy = window.innerHeight / 2;
+            
+            setTimeout(() => createExplosion(cx, cy, 150, 4), 100);
+            setTimeout(() => createExplosion(cx, cy, 150, 6), 400);
+            setTimeout(() => createExplosion(cx, cy, 150, 8), 700);
+
+            // Show the special message
+            setTimeout(() => {
+                secretMessageEl.classList.add('show');
+            }, 800);
+        }
+
+        // Allow closing the message to keep playing with the card
+        closeMsgBtn.addEventListener('click', () => {
+            secretMessageEl.classList.remove('show');
+            // Hide the counter entirely once game is beaten
+            bearCounterEl.style.opacity = '0'; 
         });
     </script>
 </body>
