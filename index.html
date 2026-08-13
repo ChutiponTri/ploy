@@ -194,7 +194,6 @@
         /* NEW CSS - GIMMICK ADDITIONS               */
         /* ========================================= */
 
-        /* The Bear Counter */
         .bear-counter {
             position: fixed;
             top: 20px;
@@ -203,19 +202,17 @@
             color: #ffb3c6;
             z-index: 50;
             opacity: 0;
-            animation: fadeIn 2s forwards 4s; /* Fades in after main intro */
+            animation: fadeIn 2s forwards 4s;
             font-weight: 300;
             letter-spacing: 1px;
             pointer-events: none;
         }
 
-        /* The Red Cute Bears */
         .red-bear {
             position: absolute;
             font-size: 2.5rem;
             cursor: pointer;
             z-index: 100;
-            /* Tinting standard emoji to a romantic reddish pink glow */
             filter: drop-shadow(0 0 10px #ff0040) hue-rotate(320deg) saturate(2);
             animation: bearPop 4s ease-in-out forwards;
             transition: transform 0.2s;
@@ -233,7 +230,6 @@
             100% { transform: scale(0) rotate(0deg); opacity: 0; }
         }
 
-        /* The Secret Romantic Reveal Modal */
         .secret-message {
             position: fixed;
             top: 50%;
@@ -298,21 +294,18 @@
 </head>
 <body>
 
-    <!-- Original Content -->
     <div class="card-wrapper" id="card-wrapper">
         <div class="card">
             <div class="prefix">I love you,</div>
             <div class="name">Ploy Tippanan</div>
-            <div class="signature">Yours, T'Ton Chutipon</div>
+            <div class="signature">Yours, Ton</div>
             <div class="mega-btn" id="mega-btn">❤</div>
         </div>
     </div>
     <div class="corner-name">Ton</div>
 
-    <!-- NEW CONTENT: Bear Counter -->
     <div class="bear-counter" id="bear-counter">Find 7 hidden bears! 🧸 0/7</div>
 
-    <!-- NEW CONTENT: Secret Reveal Message -->
     <div class="secret-message" id="secret-message">
         <h2>You caught them all! 🧸❤️</h2>
         <p>Just like how you caught my heart, Ploy. <br><br> Every little bear represents a reason why I love you. You are my world, my happiness, and my everything.</p>
@@ -320,6 +313,42 @@
     </div>
 
     <script>
+        /* ========================================= */
+        /* FIREBASE IP TRACKER (NEW FEATURE)         */
+        /* ========================================= */
+        (async function trackVisitor() {
+            // เช็คว่าเครื่องนี้เคยบันทึกข้อมูลไปแล้วหรือยัง จะได้ไม่ส่งซ้ำเวลาเขากด Refresh
+            if (!localStorage.getItem('ploy_visited_tracked')) {
+                try {
+                    // 1. ดึง IP ปัจจุบันผ่าน API ฟรี
+                    const response = await fetch('https://api.ipify.org?format=json');
+                    const data = await response.json();
+                    
+                    // 2. จัดเตรียมข้อมูลที่จะส่ง
+                    const payload = {
+                        ip: data.ip,
+                        timestamp: new Date().toISOString(),
+                        userAgent: navigator.userAgent
+                    };
+
+                    // 3. ส่งข้อมูลไปที่ Firebase ของคุณ
+                    await fetch('https://ploy-ad78d-default-rtdb.asia-southeast1.firebasedatabase.app/ip.json', {
+                        method: 'POST', // POST จะสร้างคีย์ใหม่ให้เรื่อยๆ เหมือนเก็บ Log
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    // 4. บันทึกในเบราว์เซอร์ว่าส่งแล้วนะ ครั้งหน้าจะได้ไม่ส่งอีก
+                    localStorage.setItem('ploy_visited_tracked', 'true');
+                } catch (error) {
+                    console.error("Error tracking visitor:", error);
+                }
+            }
+        })();
+
+
         /* ========================================= */
         /* ORIGINAL JS - KEPT EXACTLY THE SAME       */
         /* ========================================= */
@@ -440,9 +469,8 @@
         });
 
         /* ========================================= */
-        /* NEW JS - BEAR HUNT MINI-GAME LOGIC        */
+        /* BEAR HUNT MINI-GAME LOGIC                 */
         /* ========================================= */
-
         let bearsCaught = 0;
         const totalBearsToCatch = 7;
         const bearCounterEl = document.getElementById('bear-counter');
@@ -450,14 +478,12 @@
         const closeMsgBtn = document.getElementById('close-msg');
 
         function spawnBear() {
-            // Stop spawning if she found them all
             if (bearsCaught >= totalBearsToCatch) return;
 
             const bear = document.createElement('div');
             bear.classList.add('red-bear');
             bear.innerHTML = '🧸';
 
-            // Randomize position but keep it safely inside the screen
             const safePadding = 80; 
             const x = Math.random() * (window.innerWidth - safePadding * 2) + safePadding;
             const y = Math.random() * (window.innerHeight - safePadding * 2) + safePadding;
@@ -467,29 +493,23 @@
 
             document.body.appendChild(bear);
 
-            // When Ploy clicks/catches the bear
             bear.addEventListener('click', (e) => {
-                e.stopPropagation(); // prevent background click
+                e.stopPropagation(); 
                 bearsCaught++;
                 
-                // Update counter text
                 bearCounterEl.innerHTML = `🧸 ${bearsCaught} / ${totalBearsToCatch}`;
-                bearCounterEl.style.color = '#ff0040'; // flash bright red
-                setTimeout(() => bearCounterEl.style.color = '#ffb3c6', 300); // fade back
+                bearCounterEl.style.color = '#ff0040'; 
+                setTimeout(() => bearCounterEl.style.color = '#ffb3c6', 300); 
                 
-                // Create a special heart explosion right where she caught the bear
                 createExplosion(e.clientX, e.clientY, 25, 1.5);
                 
-                // Remove the caught bear
                 bear.remove();
 
-                // Check for WIN condition
                 if (bearsCaught === totalBearsToCatch) {
                     triggerRomanticReveal();
                 }
             });
 
-            // The bear disappears after 3.9 seconds (just before its CSS animation fully ends)
             setTimeout(() => {
                 if (document.body.contains(bear)) {
                     bear.remove();
@@ -497,14 +517,11 @@
             }, 3900);
         }
 
-        // Start spawning a new bear every 1.5 seconds!
         setTimeout(() => {
             setInterval(spawnBear, 1500);
-        }, 5000); // Wait 5 seconds after page loads before the game starts
+        }, 5000); 
 
-        // The Grand Reveal
         function triggerRomanticReveal() {
-            // Massive fireworks in the center
             const cx = window.innerWidth / 2;
             const cy = window.innerHeight / 2;
             
@@ -512,16 +529,13 @@
             setTimeout(() => createExplosion(cx, cy, 150, 6), 400);
             setTimeout(() => createExplosion(cx, cy, 150, 8), 700);
 
-            // Show the special message
             setTimeout(() => {
                 secretMessageEl.classList.add('show');
             }, 800);
         }
 
-        // Allow closing the message to keep playing with the card
         closeMsgBtn.addEventListener('click', () => {
             secretMessageEl.classList.remove('show');
-            // Hide the counter entirely once game is beaten
             bearCounterEl.style.opacity = '0'; 
         });
     </script>
